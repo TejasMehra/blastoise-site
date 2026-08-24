@@ -1,4 +1,3 @@
-import Link from "next/link";
 import Image from "next/image";
 import { REPO_URL, ISSUES_URL } from "@/lib/site";
 
@@ -35,14 +34,14 @@ export function Footer() {
               </a>
             </li>
             <li>
-              <Link href="/docs" style={{ color: "var(--ink-dim)" }}>
+              <a href="/docs" style={{ color: "var(--ink-dim)" }}>
                 documentation
-              </Link>
+              </a>
             </li>
             <li>
-              <Link href="/docs/minimum-privilege-role" style={{ color: "var(--ink-dim)" }}>
+              <a href="/docs/minimum-privilege-role" style={{ color: "var(--ink-dim)" }}>
                 the database role
-              </Link>
+              </a>
             </li>
             <li>
               <a href={ISSUES_URL} style={{ color: "var(--ink-dim)" }}>

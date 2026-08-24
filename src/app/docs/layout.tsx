@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
 import { listDocs } from "@/lib/content";
@@ -24,9 +23,9 @@ export default function DocsLayout({ children }: { children: React.ReactNode }) 
               </ul>
             </nav>
             <p className="mt-6">
-              <Link className="text-sm font-semibold" href="/" style={{ color: "var(--water)" }}>
+              <a className="text-sm font-semibold" href="/" style={{ color: "var(--water)" }}>
                 ← back to the site
-              </Link>
+              </a>
             </p>
           </aside>
 

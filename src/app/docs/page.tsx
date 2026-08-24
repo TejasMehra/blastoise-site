@@ -1,4 +1,3 @@
-import Link from "next/link";
 import type { Metadata } from "next";
 import { listDocs } from "@/lib/content";
 
@@ -26,7 +25,7 @@ export default function DocsIndex() {
 
       <div className="mt-8 grid gap-3 sm:grid-cols-2">
         {docs.map((d) => (
-          <Link
+          <a
             key={d.slug}
             href={`/docs/${d.slug}`}
             className="card block p-5 transition-transform duration-200 hover:-translate-y-1"
@@ -40,7 +39,7 @@ export default function DocsIndex() {
             >
               {d.blurb}
             </p>
-          </Link>
+          </a>
         ))}
       </div>
     </div>

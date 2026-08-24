@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { REPO_URL } from "@/lib/site";
@@ -25,7 +24,7 @@ export function Nav() {
       }}
     >
       <nav className="wrap flex items-center justify-between py-4" aria-label="main">
-        <Link href="/" className="flex items-center gap-2.5 no-underline">
+        <a href="/" className="flex items-center gap-2.5 no-underline">
           <Image
             src="/assets/blastoise.png"
             alt=""
@@ -38,12 +37,12 @@ export function Nav() {
           <span className="text-[15px] font-semibold" style={{ letterSpacing: "-0.02em" }}>
             blastoise
           </span>
-        </Link>
+        </a>
 
         <div className="flex items-center gap-7">
-          <Link href="/docs" className="text-sm no-underline transition-colors hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)" }}>
+          <a href="/docs" className="text-sm no-underline transition-colors hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)" }}>
             docs
-          </Link>
+          </a>
           <a href={REPO_URL} className="text-sm no-underline transition-colors hover:text-[var(--ink)]" style={{ color: "var(--ink-dim)" }}>
             github ↗
           </a>

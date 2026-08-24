@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 export function DocsNavLink({
@@ -13,7 +12,7 @@ export function DocsNavLink({
   const pathname = usePathname();
   const active = pathname === href;
   return (
-    <Link
+    <a
       href={href}
       aria-current={active ? "page" : undefined}
       className="block rounded-r-md px-3 py-2 text-sm transition-colors"
@@ -24,6 +23,6 @@ export function DocsNavLink({
       }}
     >
       {children}
-    </Link>
+    </a>
   );
 }

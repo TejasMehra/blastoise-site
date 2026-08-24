@@ -96,7 +96,7 @@ ws.addEventListener("message", (ev) => {
       m.params.exceptionDetails?.exception?.description?.slice(0, 2400));
   }
   if (m.method === "Log.entryAdded" && m.params.entry.level !== "verbose") {
-    console.error(`  CONSOLE[${m.params.entry.level}]:`, m.params.entry.text?.slice(0, 300));
+    console.error(`  CONSOLE[${m.params.entry.level}]:`, m.params.entry.text?.slice(0, 300), m.params.entry.url ?? "");
   }
   if (m.method === "Runtime.consoleAPICalled" && ["error","warning"].includes(m.params.type)) {
     console.error(`  CONSOLE[${m.params.type}]:`,
