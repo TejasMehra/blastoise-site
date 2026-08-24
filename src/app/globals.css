@@ -1,26 +1,399 @@
 @import "tailwindcss";
 
+/* ============================================================
+   blastoise - black, minimal, and everything breathes.
+   ============================================================ */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --bg: #030303;
+  --ink: #f2f4f8;
+  --ink-dim: #8f97a8;
+  --ink-faint: #565d6b;
+
+  --water: #56c8f5;
+  --safe: #35d488;
+  --irrev: #4fd0e8;
+  --timing: #f2bd3c;
+  --unsafe: #ff4b40;
+  --unknown: #8a93a8;
+
+  --line: rgba(255, 255, 255, 0.09);
+  --line-strong: rgba(255, 255, 255, 0.2);
+
+  --font-body: var(--font-sans), system-ui, sans-serif;
+  --font-mono: var(--font-mono-face), ui-monospace, monospace;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  background: var(--bg);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  /* transparent on purpose: an opaque body background paints ABOVE
+     negative-z fixed layers (spec painting order), which would hide
+     the rings. html carries the black. */
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection {
+  background: var(--water);
+  color: #02141d;
+}
+
+:focus-visible {
+  outline: 2px solid var(--water);
+  outline-offset: 4px;
+}
+
+/* ---------- the custom cursor ---------- */
+
+@media (pointer: fine) {
+  body,
+  a,
+  button {
+    cursor: none;
+  }
+}
+.cursor-dot,
+.cursor-ring {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 90;
+  pointer-events: none;
+  border-radius: 999px;
+  will-change: transform;
+}
+.cursor-dot {
+  width: 6px;
+  height: 6px;
+  background: #fff;
+  mix-blend-mode: difference;
+}
+.cursor-ring {
+  width: 34px;
+  height: 34px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  mix-blend-mode: difference;
+  transition:
+    width 0.25s ease,
+    height 0.25s ease,
+    border-color 0.25s ease,
+    background 0.25s ease;
+}
+.cursor-ring[data-hover="1"] {
+  width: 58px;
+  height: 58px;
+  border-color: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.08);
+}
+@media (pointer: coarse) {
+  .cursor-dot,
+  .cursor-ring {
+    display: none;
+  }
+}
+
+/* ---------- type ---------- */
+
+.label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--ink-faint);
+}
+
+.lede {
+  font-size: clamp(1rem, 1.5vw, 1.16rem);
+  line-height: 1.8;
+  color: var(--ink-dim);
+}
+
+code,
+pre,
+.mono {
+  font-family: var(--font-mono);
+  font-variant-ligatures: none;
+}
+
+/* ---------- structure: rules, not boxes ---------- */
+
+.hairline {
+  border-top: 1px solid var(--line);
+}
+
+.wrap {
+  width: 100%;
+  max-width: 1060px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+}
+
+/* ---------- links & buttons: quiet ---------- */
+
+.link {
+  color: var(--ink);
+  text-decoration: none;
+  border-bottom: 1px solid var(--line-strong);
+  padding-bottom: 2px;
+  transition:
+    border-color 0.25s,
+    color 0.25s;
+}
+.link:hover {
+  border-color: var(--ink);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 550;
+  font-size: 0.92rem;
+  padding: 0.72rem 1.5rem;
+  border-radius: 999px;
+  background: var(--ink);
+  color: #060606;
+  text-decoration: none;
+  will-change: transform;
+}
+.pill-ghost {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line-strong);
+}
+
+/* ---------- marquee ---------- */
+
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee-mask {
+  overflow: hidden;
+  mask-image: linear-gradient(90deg, transparent, black 15%, black 85%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  gap: 3.5rem;
+  animation: marquee 42s linear infinite;
+}
+/* ---------- misc ---------- */
+
+@keyframes caret {
+  0%,
+  49% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
+}
+.caret {
+  animation: caret 1s steps(1) infinite;
+}
+
+.scroll-x {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.scroll-x::-webkit-scrollbar {
+  height: 8px;
+}
+.scroll-x::-webkit-scrollbar-track {
+  background: transparent;
+}
+.scroll-x::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border-radius: 4px;
+}
+
+.skip-link {
+  position: absolute;
+  left: -9999px;
+}
+.skip-link:focus {
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  padding: 0.75rem 1rem;
+  background: var(--water);
+  color: #02141d;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+@media (max-width: 640px) {
+  .sql-fluid {
+    white-space: pre-wrap !important;
+    word-break: break-word;
+  }
+}
+
+/* ============================================================
+   long-form: docs and rendered markdown. quiet on purpose.
+   ============================================================ */
+
+.prose {
+  color: var(--ink-dim);
+  font-size: 0.96rem;
+  line-height: 1.78;
+}
+.prose > *:first-child {
+  margin-top: 0;
+}
+
+.prose h1 {
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  font-size: clamp(1.7rem, 4vw, 2.3rem);
+  line-height: 1.1;
+  color: var(--ink);
+  margin: 0 0 1rem;
+}
+.prose h2 {
+  font-weight: 700;
+  font-size: 1.3rem;
+  letter-spacing: -0.02em;
+  color: var(--water);
+  margin: 2.6rem 0 0.8rem;
+  scroll-margin-top: 6rem;
+}
+.prose h3 {
+  font-weight: 650;
+  font-size: 1.03rem;
+  color: var(--ink);
+  margin: 1.8rem 0 0.5rem;
+  scroll-margin-top: 6rem;
+}
+
+.prose p {
+  margin: 0.9rem 0;
+}
+.prose strong {
+  color: var(--ink);
+  font-weight: 650;
+}
+
+.prose ul,
+.prose ol {
+  margin: 0.9rem 0;
+  padding-left: 1.35rem;
+}
+.prose li {
+  margin: 0.4rem 0;
+}
+.prose ul {
+  list-style: square;
+}
+.prose ol {
+  list-style: decimal;
+}
+.prose li::marker {
+  color: var(--ink-faint);
+}
+
+.prose a {
+  color: var(--water);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-thickness: 1px;
+}
+.prose a:hover {
+  color: var(--ink);
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  padding: 0.1em 0.36em;
+  color: var(--ink);
+  word-break: break-word;
+}
+
+.prose pre {
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 1rem;
+  margin: 1.15rem 0;
+  overflow-x: auto;
+  line-height: 1.62;
+}
+.prose pre code {
+  background: none;
+  border: 0;
+  padding: 0;
+  font-size: 0.8125rem;
+  color: var(--ink);
+  white-space: pre;
+}
+
+.prose table {
+  width: 100%;
+  max-width: 100%;
+  border-collapse: collapse;
+  margin: 1.15rem 0;
+  font-size: 0.86rem;
+  display: block;
+  overflow-x: auto;
+}
+.prose th {
+  text-align: left;
+  font-weight: 650;
+  font-size: 0.78rem;
+  color: var(--water);
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  white-space: nowrap;
+}
+.prose td {
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.prose td:first-child {
+  white-space: nowrap;
+}
+
+.prose details {
+  margin: 1rem 0;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 0.7rem 0.9rem;
+}
+.prose summary {
+  cursor: pointer;
+  color: var(--ink);
+  font-weight: 600;
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 1.6rem 0;
+}
+
+.prose sub {
+  display: block;
+  font-size: 0.78rem;
+  color: var(--ink-faint);
+  margin-top: 0.5rem;
+  vertical-align: baseline;
+}
+
+.prose blockquote {
+  border-left: 3px solid var(--line-strong);
+  padding-left: 1rem;
+  margin: 1rem 0;
 }

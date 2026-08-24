@@ -1,0 +1,56 @@
+SHELL REPORT
+============
+verdict: REQUIRES_APPROVAL
+change a02fc1539d6b43aa  pg 17  offline  evaluated 2026-08-23T22:05:03.952230+00:00
+
+pressure levels
+  unsafe                0   Hydro Pump       do not run as written
+  unknown               2   Fog              not enough evidence to say
+  needs_timing          0   Rain Check       safe in itself, wrong at the wrong moment
+  safe_irreversible     0   One-Way Current  proceed, but there is no undo
+  safe                  1   Calm Water       nothing to do
+
+statements
+  L1     create_index_concurrently    safe               -           proven
+         create_index_concurrently holds no lock that blocks reads or writes
+         on a pre-existing relation
+  L3     alter_table                  unknown            -           unverified
+         no live snapshot: the catalog row is a worst case needing live
+         context (whether the column's type is a domain with constraints (the
+         IR records the type name, not whether it is a domain): a constrained
+         domain disables the fast path and rewrites)
+  L5     alter_table                  unknown            -           unverified
+         add_column_default_volatile blocks reads for a duration that could
+         not be estimated: no live snapshot: the row count of events is
+         unknown
+
+unverified (7)
+  [no_snapshot] no live snapshot: relation sizes, statistics, current lock
+  holders, replication state, and schema facts were not checked; every size-
+  or state-dependent judgment is unknown
+  [execution_state] the lock acquisition queue at execution time cannot be
+  known in advance: any transaction open when the migration runs can make it
+  wait, and everything arriving later queues behind that wait
+  [cannot_estimate] L1 no live snapshot: the row count of events is unknown
+  [unknown_classification] L3 no live snapshot: the catalog row is a worst
+  case needing live context (whether the column's type is a domain with
+  constraints (the IR records the type name, not whether it is a domain): a
+  constrained domain disables the fast path and rewrites)
+  [cannot_estimate] L3 no live snapshot: the catalog row is a worst case
+  needing live context (whether the column's type is a domain with constraints
+  (the IR records the type name, not whether it is a domain): a constrained
+  domain disables the fast path and rewrites)
+  [unknown_classification] L5 add_column_default_volatile blocks reads for a
+  duration that could not be estimated: no live snapshot: the row count of
+  events is unknown
+  [cannot_estimate] L5 no live snapshot: the row count of events is unknown
+
+  note: contains statements that fail inside a transaction block: the
+  migration runner must not wrap this file in one
+
+rollback: feasible
+  every statement's committed effect can be undone by a reverse migration;
+  rolling back still requires writing and running one
+
+evidence: 4 file(s), not written to disk
+signature: unsigned (Shell Seal not applied)

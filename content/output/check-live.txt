@@ -1,0 +1,52 @@
+SHELL REPORT
+============
+verdict: BLOCK
+change a02fc1539d6b43aa  pg 17  online  evaluated 2026-08-23T22:05:01.180577+00:00
+
+pressure levels
+  unsafe                1   Hydro Pump       do not run as written
+  unknown               0   Fog              not enough evidence to say
+  needs_timing          1   Rain Check       safe in itself, wrong at the wrong moment
+  safe_irreversible     0   One-Way Current  proceed, but there is no undo
+  safe                  1   Calm Water       nothing to do
+
+statements
+  L1     create_index_concurrently    safe               seconds     proven
+         create_index_concurrently holds no lock that blocks reads or writes
+         on a pre-existing relation (the work itself runs in the seconds band)
+  L3     alter_table                  needs_timing       sub_second  observed
+         add_column_default_nonvolatile is catalog-only but takes a read-and-
+         write-blocking lock on events; the work is brief, the wait for the
+         lock may not be
+         condition: acquisition must be prompt: set lock_timeout with retries
+         or run in a low-traffic window - while this statement waits for its
+         lock, every later query on the relation queues behind it
+  L5     alter_table                  unsafe             minutes     simulated
+         add_column_default_volatile blocks reads and writes for a hold
+         measured in minutes at worst: an outage-length stall
+
+unverified (5)
+  [snapshot_limits] the snapshot describes the database at capture time, not
+  at execution time; it is not transactionally consistent across sections, and
+  reltuples is an estimate even when fresh
+  [execution_state] the lock acquisition queue at execution time cannot be
+  known in advance: any transaction open when the migration runs can make it
+  wait, and everything arriving later queues behind that wait
+  [uncalibrated_constant] duration constant 'add_column_rewrite' was measured
+  on one uncontended machine, not calibrated across environments; production
+  can only be slower
+  [uncalibrated_constant] duration constant 'constant_op' is an uncalibrated
+  guess; estimates built on it carry a 4x-widened interval
+  [uncalibrated_constant] duration constant 'index_build_btree' was measured
+  on one uncontended machine, not calibrated across environments; production
+  can only be slower
+
+  note: contains statements that fail inside a transaction block: the
+  migration runner must not wrap this file in one
+
+rollback: feasible
+  every statement's committed effect can be undone by a reverse migration;
+  rolling back still requires writing and running one
+
+evidence: 5 file(s), not written to disk
+signature: unsigned (Shell Seal not applied)
