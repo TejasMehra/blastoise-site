@@ -37,7 +37,7 @@ export function Output({ live }: { live: string }) {
             trigger: ref.current!.querySelector("[data-term]"),
             start: "top 78%",
             end: "bottom 60%",
-            scrub: 0.4,
+            scrub: true,
           },
         });
         gsap.from("[data-ohead]", {

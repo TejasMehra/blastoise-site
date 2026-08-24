@@ -35,7 +35,8 @@ function usePinned(
             start: "top top",
             end: length,
             pin: true,
-            scrub: 0.55,
+            anticipatePin: 1,
+            scrub: true,
             onToggle: (self) => onToggle?.(self.isActive),
           },
         });

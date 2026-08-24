@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import { Cursor } from "@/components/site/Fx";
 
 const sans = Inter({
   subsets: ["latin"],
@@ -55,6 +56,7 @@ export default function RootLayout({
           skip to content
         </a>
         {children}
+        <Cursor />
       </body>
     </html>
   );

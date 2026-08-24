@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { gsap } from "@/lib/gsapClient";
+import { gsap, ScrollTrigger } from "@/lib/gsapClient";
 
 /* ==================================================================
    the blast radius, literally: circles radiating out from a point,
@@ -152,6 +152,20 @@ export function Cursor() {
       <div ref={ringRef} className="cursor-ring" aria-hidden />
     </>
   );
+}
+
+/* Pinned triggers are measured at hydration, before the webfonts land.
+   When the fonts arrive the page gets taller and every pin start drifts,
+   which reads as "the scroll is out of sync". Re-measure once everything
+   has actually settled. */
+export function ScrollSync() {
+  useEffect(() => {
+    const refresh = () => ScrollTrigger.refresh();
+    document.fonts?.ready.then(refresh).catch(() => {});
+    window.addEventListener("load", refresh);
+    return () => window.removeEventListener("load", refresh);
+  }, []);
+  return null;
 }
 
 /* a link that leans toward the cursor */

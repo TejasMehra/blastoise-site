@@ -1,6 +1,6 @@
 import { Nav } from "@/components/Nav";
 import { Footer } from "@/components/Footer";
-import { Rings, Cursor } from "@/components/site/Fx";
+import { Rings, ScrollSync } from "@/components/site/Fx";
 import { Hero, Manifesto, Verdicts, Sixteen, FieldData, HowItKnows, Cta } from "@/components/site/Sections";
 import { Story } from "@/components/site/Story";
 import { Output } from "@/components/site/Output";
@@ -28,7 +28,7 @@ export default function Home() {
       </main>
       <Footer />
       <ScrollCompanion />
-      <Cursor />
+      <ScrollSync />
     </>
   );
 }

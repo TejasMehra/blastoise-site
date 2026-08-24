@@ -105,7 +105,7 @@ export function Manifesto() {
             trigger: ref.current,
             start: "top 82%",
             end: "bottom 45%",
-            scrub: 0.4,
+            scrub: true,
           },
         });
     },
@@ -214,7 +214,8 @@ export function Verdicts() {
             start: "top top",
             end: "+=280%",
             pin: true,
-            scrub: 0.5,
+            anticipatePin: 1,
+            scrub: true,
             invalidateOnRefresh: true,
           },
         });
