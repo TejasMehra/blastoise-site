@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { REPO_URL, ISSUES_URL } from "@/lib/site";
+import { REPO_URL, ISSUES_URL, PYPI_URL, PKG } from "@/lib/site";
 
 export function Footer() {
   return (
@@ -31,6 +31,11 @@ export function Footer() {
             <li>
               <a href={REPO_URL} style={{ color: "var(--ink-dim)" }}>
                 repository
+              </a>
+            </li>
+            <li>
+              <a href={PYPI_URL} style={{ color: "var(--ink-dim)" }}>
+                {PKG} on pypi
               </a>
             </li>
             <li>
