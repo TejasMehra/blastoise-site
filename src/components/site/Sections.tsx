@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { gsap, SplitText, useGSAP } from "@/lib/gsapClient";
 import { Magnetic } from "./Fx";
-import { REPO_URL } from "@/lib/site";
+import { REPO_URL, PYPI_URL, PKG } from "@/lib/site";
 
 /* ================================================================== */
 /* hero - the name of the game, letter by letter                       */
@@ -605,7 +605,7 @@ export function Cta() {
   }
 
   const CMDS = [
-    "pip install blastoise",
+    `pip install ${PKG}`,
     "blastoise check migrations/0042.sql --offline",
   ];
 
@@ -647,15 +647,29 @@ export function Cta() {
           ))}
         </div>
 
+        <p data-c className="mx-auto mt-6 max-w-md text-[13px] leading-relaxed" style={{ color: "var(--ink-faint)" }}>
+          the package is{" "}
+          <a href={PYPI_URL} className="mono" style={{ color: "var(--ink-dim)" }}>
+            {PKG}
+          </a>
+          , the command is <span className="mono">blastoise</span>.{" "}
+          <span className="mono">pip install blastoise</span> is an unrelated
+          parquet library.
+        </p>
+
         <div data-c className="mt-12 flex flex-wrap items-center justify-center gap-4">
           <Magnetic href={REPO_URL} className="pill">
             github
           </Magnetic>
+          <Magnetic href={PYPI_URL} className="pill pill-ghost">
+            pypi
+          </Magnetic>
           <Magnetic href="/docs" className="pill pill-ghost">
             docs
           </Magnetic>
-          {/* the repo isn't public yet, so this points at the locally
-              rendered copy of the action's README instead of a 404 */}
+          {/* the locally rendered copy, not the GitHub one: same text, and
+              it keeps the reader on the docs nav instead of dropping them
+              into a repository subdirectory */}
           <Magnetic href="/docs/github-action" className="pill pill-ghost">
             the github action
           </Magnetic>
